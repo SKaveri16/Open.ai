@@ -1,0 +1,5 @@
+[
+  {"description": "Complete homework", "completed": false},
+  {"description": "Buy groceries", "completed": true},
+  {"description": "Call mom", "completed": false}
+]

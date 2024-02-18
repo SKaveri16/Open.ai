@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+    .chat-container {
+        max-width: 500px;
+        margin: 50px auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .chat-messages {
+        padding: 10px;
+        height: 300px;
+        overflow-y: auto;
+    }
+    .user-message, .bot-message {
+        margin: 5px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .user-message {
+        background-color: #007bff;
+        color: white;
+        text-align: right;
+    }
+    .bot-message {
+        background-color: #6c757d;
+        color: white;
+        text-align: left;
+    }
+    .chat-input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: none;
+        border-top: 1px solid #ccc;
+    }
+</style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-messages" id="chat-messages"></div>
+    <input type="text" class="chat-input" id="user-input" placeholder="Type your message...">
+</div>
+<script>
+      document.getElementById('user-input').addEventListener('keypress', function (e) {
+              if (e.key === 'Enter') {
+                  sendMessage();
+              }
+          });
+  
+          function sendMessage() {
+              var userInput = document.getElementById('user-input').value;
+              if (!userInput) return;
+  
+              appendMessage(userInput, true);
+              document.getElementById('user-input').value = '';
+  
+              // Send user input to backend
+              fetch('/process', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ message: userInput })
+              })
+              .then(response => response.json())
+              .then(data => {
+                  var botResponse = data.message;
+                  appendMessage(botResponse, false);
+              })
+              .catch(error => console.error('Error:', error));
+          }
+  
+          function appendMessage(message, isUser) {
+              var chatMessages = document.getElementById('chat-messages');
+              var messageElement = document.createElement('div');
+              messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+              messageElement.textContent = message;
+              chatMessages.appendChild(messageElement);
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+          }
+      </script>
+  </body>
+  </html>
+  
