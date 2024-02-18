@@ -1,7 +1,4 @@
 # Open.ai
-Sure, here's a basic README template for your Flask project:
-
----
 
 # Flask Chatbot Project
 
